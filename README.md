@@ -40,15 +40,16 @@ Usage
 
 ####Data Store table/collection view controller
 
-1. Make your concrete view controller extends from `XLDataStoreController`
+* Make your concrete view controller extends from `XLDataStoreController`
 
-2. Add sections (`XLDataSectionStore` instance) and then items to a section. Items can be of any type ;)
+* Add sections (`XLDataSectionStore` instance) and then items to a section. Items can be of any type ;)
 ```obj-c
 [self.dataStore addDataSection:[XLDataSectionStore dataSectionStoreWithTitle:@"Example"]];
 [self.dataStore addDataItem:@{@"title": "Row title 1"}];
 [self.dataStore addDataItem:@{@"title": "Row title 2"}];
 ```
-3. Return the cell:
+
+* Return the cell:
 ```obj-c
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -63,9 +64,9 @@ Usage
 
 ####Data Store table/collection view controller sync with remote xml/json endpoint
 
-1. Make your concrete view controller extends from `XLRemoteDataStoreController`
+* Make your concrete view controller extends from `XLRemoteDataStoreController`
 
-2. Set up the `dataLoader` property  by following these steps:
+* Set up the `dataLoader` property  by following these steps:
 ```obj-c
 // instantiate a XLDataLoader instance and set `dataLoader` property with it. We can configure a convenient initializer to offset, limit and filter query parameters.
 self.dataLoader =  [[XLDataLoader alloc] initWithDelegate:self
@@ -82,12 +83,12 @@ self.dataLoader.parameters[@"paramName1"] = paramValue1;
 self.dataLoader.parameters[@"paramName2"] = paramValue2;
 ```
 
-3. Provide a `AFHTTPSessionManager` by implementing the following `XLDataLoaderDelegate` method:
+* Provide a `AFHTTPSessionManager` by implementing the following `XLDataLoaderDelegate` method:
 ```obj-c
 -(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader
 ```
 
-4. Return the cell:
+* Return the cell:
 ```obj-c
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -100,20 +101,21 @@ self.dataLoader.parameters[@"paramName2"] = paramValue2;
 }
 ```
 
-5. **Optional** Override a method to update the `XLDataStore` in a different way. By default XLData appends the fetched items to the last section of `XLDataStore`.
+* **Optional** Override a method to update the `XLDataStore` in a different way. By default XLData appends the fetched items to the last section of `XLDataStore`.
 ```obj-c
 -(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader`
 ```
 
 ####Core Data table/collection view controller
 
-1. Make your concrete view controller extends from `XLCoreDataController`.
+* Make your concrete view controller extends from `XLCoreDataController`.
 
-2. Set up `fetchedResultsController` property:
+* Set up `fetchedResultsController` property:
 ```obj-c
 self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[User getFetchRequest] managedObjectContext:[CoreDataStore mainQueueContext] sectionNameKeyPath:nil cacheName:nil];
 ```
-3. Return the cell:
+
+* Return the cell:
 ```obj-c
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -129,9 +131,9 @@ self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetc
 
 ####Core Data table/collection view controller sync with remote xml/json endpoint
 
-1. Make your concrete view controller extends from `XLRemoteCoreDataController`
+* Make your concrete view controller extends from `XLRemoteCoreDataController`
 
-2. Set up the `dataLoader` property by following these steps:
+* Set up the `dataLoader` property by following these steps:
 ```obj-c
 // instantiate a `XLDataLoader` instance and set `dataLoader` property with it. We can use a convenient initializer to offset, limit and filter query parameters.
 self.dataLoader =  [[XLDataLoader alloc] initWithDelegate:self
@@ -148,12 +150,12 @@ self.dataLoader.parameters[@"paramName1"] = paramValue1;
 self.dataLoader.parameters[@"paramName2"] = paramValue2;
 ```
 
-3. Provide a `AFHTTPSessionManager` by implementing the following `XLDataLoaderDelegate` method:
+* Provide a `AFHTTPSessionManager` by implementing the following `XLDataLoaderDelegate` method:
 ```obj-c
 -(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader
 ```
 
-4. Return the cell:
+* Return the cell:
 ```obj-c
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -166,8 +168,7 @@ self.dataLoader.parameters[@"paramName2"] = paramValue2;
 }
 ```
 
-
-5. You must override the following method in order to syncronize the  dataset fetched by the DataLoader with the Core Data dataset.
+* You must override the following method in order to syncronize the  dataset fetched by the DataLoader with the Core Data dataset.
 ```obj-c
 -(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader`
 ```
