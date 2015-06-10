@@ -3,9 +3,6 @@ Pod::Spec.new do |s|
   s.version  = '1.0.0'
   s.license  = 'MIT'
   s.summary  = 'XLData provides an elegant and concise way to load and show data sets into UITableViews and UICollectionViews.'
-  s.description = <<-DESC
-  Most powerful and flexible library to load and show datasets into UITableViews and UICollectionViews.
-                  DESC
   s.homepage = 'https://github.com/xmartlabs/XLData'
   s.authors  = { 'Martin Barreto' => 'martin@xmartlabs.com', 'Miguel Revetria' => 'miguel@xmartlabs.com' }
   s.source   = { :git => 'https://github.com/xmartlabs/XLData.git', :tag => 'v1.0.0'}

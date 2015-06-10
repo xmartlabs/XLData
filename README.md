@@ -167,7 +167,7 @@ self.dataLoader.parameters[@"paramName2"] = paramValue2;
 ```
 
 
-4. You must override the following method in order to syncronize the  dataset fetched by the DataLoader with the Core Data dataset.
+5. You must override the following method in order to syncronize the  dataset fetched by the DataLoader with the Core Data dataset.
 ```obj-c
 -(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader`
 ```
