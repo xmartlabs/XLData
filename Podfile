@@ -8,8 +8,4 @@ pod 'XLData', :path => '.'
 #pod 'XLData/RemoteCoreData', :path => '.'
 #pod 'XLData/RemoteDataStore', :path => '.'
 #######
-
-pod 'AFNetworking', '~>2.0'
 pod 'AFNetworkActivityLogger', '~>2.0'
-
-
