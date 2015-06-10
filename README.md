@@ -4,7 +4,7 @@ XLData
 By [XMARTLABS](http://xmartlabs.com).
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/xmartlabs/XLData/blob/master/LICENSE)
-[![license](https://img.shields.io/badge/pod-1.0.0-blue.svg)](https://github.com/xmartlabs/XLData/releases)
+[![license](https://img.shields.io/badge/pod-1.0.1-blue.svg)](https://github.com/xmartlabs/XLData/releases)
 
 XLData provides an elegant and concise way to load and show data sets into table and collection views.
 
@@ -243,7 +243,7 @@ Installation
 
 The easiest way to use XLData in your app is via [CocoaPods](http://cocoapods.org/ "CocoaPods").
 
-1. Add the following line in the project's Podfile file: `pod 'XLData', '~> 1.0.0'`.
+1. Add the following line in the project's Podfile file: `pod 'XLData', '~> 1.0'`.
 
 2. Run the command `pod install` from the Podfile folder directory.
 
@@ -263,6 +263,10 @@ Requirements
 
 Release Notes
 --------------
+
+Version 1.0.1 (cocoaPod)
+
+* Fix podspec minor issue.
 
 Version 1.0.0 (cocoaPod)
 
