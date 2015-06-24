@@ -139,6 +139,17 @@
     }
 }
 
+-(BOOL)removeDataItem:(id)item
+{
+    for (XLDataSectionStore * dataSection in self.dataSections) {
+        BOOL removed = [dataSection removeDataItem:item];
+        if (removed){
+            return YES;
+        }
+    }
+    return NO;
+}
+
 -(void)dealloc
 {
     @try {

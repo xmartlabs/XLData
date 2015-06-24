@@ -116,6 +116,16 @@
     [self removeDataItemsAtIndexes:[NSIndexSet indexSetWithIndex:indexPath]];
 }
 
+-(BOOL)removeDataItem:(id)item
+{
+    NSUInteger index = [self.dataRows indexOfObject:item];
+    if (index != NSNotFound){
+        [self removeDataItemAtIndex:index];
+        return YES;
+    }
+    return NO;
+}
+
 -(void)removeDataItemsAtIndexes:(NSIndexSet *)indexSet{
     [self removeDataRowsAtIndexes:indexSet];
 }
