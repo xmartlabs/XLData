@@ -187,13 +187,13 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case XLDataStoreChangeTypeInsert:
-                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self tableViewAnimationForDataStoreSectionChange:type]];
                 break;
             case XLDataStoreChangeTypeDelete:
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self tableViewAnimationForDataStoreSectionChange:type]];
                 break;
             case XLDataStoreChangeTypeUpdate:
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self tableViewAnimationForDataStoreSectionChange:type]];
                 break;
             default:
                 NSParameterAssert(YES);
@@ -221,17 +221,17 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case XLDataStoreChangeTypeInsert:
-                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:[self tableViewAnimationForDataStoreItemChange:type]];
                 break;
             case XLDataStoreChangeTypeDelete:
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:[self tableViewAnimationForDataStoreItemChange:type]];
                 break;
             case XLDataStoreChangeTypeMove:
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:[self tableViewAnimationForDataStoreItemChange:type]];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:[self tableViewAnimationForDataStoreItemChange:type]];
                 break;
             case XLDataStoreChangeTypeUpdate:
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self tableViewAnimationForDataStoreItemChange:type]];
                 break;
         }
     }
@@ -436,7 +436,6 @@
 
 #pragma mark - Protected
 
-
 -(void)didChangeContent
 {
     [self updateEmptyDataSetOverlayIfNeeded:YES];
@@ -484,5 +483,14 @@
 }
 
 
+-(UITableViewRowAnimation)tableViewAnimationForDataStoreSectionChange:(XLDataStoreChangeType)dataStoreChange
+{
+    return UITableViewRowAnimationAutomatic;
+}
+
+-(UITableViewRowAnimation)tableViewAnimationForDataStoreItemChange:(XLDataStoreChangeType)dataStoreChange
+{
+    return UITableViewRowAnimationAutomatic;
+}
 
 @end

@@ -94,5 +94,25 @@
  */
 -(void)hideEmptyStateView:(BOOL)animated;
 
+
+/**
+ *  Override to change the animation used when a section is added, removed, etc.
+ *
+ *  @param dataStoreChange kind of section data store modification
+ *
+ *  @return animation to be used
+ */
+-(UITableViewRowAnimation)tableViewAnimationForDataStoreSectionChange:(XLDataStoreChangeType)dataStoreChange;
+
+
+/**
+ *  Override to change the animation used when a item is added, removed, etc.
+ *
+ *  @param dataStoreChange kind of item data store modification
+ *
+ *  @return animation to be used
+ */
+-(UITableViewRowAnimation)tableViewAnimationForDataStoreItemChange:(XLDataStoreChangeType)dataStoreChange;
+
 @end
 

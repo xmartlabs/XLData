@@ -287,4 +287,12 @@
     [self.dataLoader forceLoad:YES];
 }
 
+
+#pragma mark - XLDataLoaderDelegate
+
+-(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader
+{
+    @throw [NSException exceptionWithName:NSGenericException reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] userInfo:nil];
+}
+
 @end
