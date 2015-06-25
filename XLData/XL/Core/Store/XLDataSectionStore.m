@@ -126,6 +126,38 @@
     return NO;
 }
 
+- (BOOL)removeDataItemMatchingPredicate:(NSPredicate *)predicate
+{
+    BOOL __block result = NO;
+    [[self.dataRows copy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        @try {
+            result = [predicate evaluateWithObject:obj substitutionVariables:nil];
+            if (result){
+                [self removeDataItemAtIndex:idx];
+                *stop = YES;
+            }
+        }
+        @catch (NSException *exception) {}
+    }];
+    return result;
+}
+
+- (BOOL)removeDataItemsMatchingPredicate:(NSPredicate *)predicate
+{
+    BOOL __block result = NO;
+    [[self.dataRows copy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        @try {
+            BOOL evalResult = [predicate evaluateWithObject:obj substitutionVariables:nil];
+            if (evalResult){
+                [self removeDataItemAtIndex:idx];
+            }
+            result = result || evalResult;
+        }
+        @catch (NSException *exception) {}
+    }];
+    return result;
+}
+
 -(void)removeDataItemsAtIndexes:(NSIndexSet *)indexSet{
     [self removeDataRowsAtIndexes:indexSet];
 }

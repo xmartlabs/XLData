@@ -43,5 +43,7 @@
 - (void)addDataItems:(NSArray *)items fromIndex:(NSUInteger)index;
 - (void)removeDataItemAtIndex:(NSUInteger)indexPath;
 - (BOOL)removeDataItem:(id)item;
+- (BOOL)removeDataItemMatchingPredicate:(NSPredicate *)predicate;
+- (BOOL)removeDataItemsMatchingPredicate:(NSPredicate *)predicate;
 
 @end

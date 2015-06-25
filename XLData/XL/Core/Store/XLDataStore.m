@@ -150,6 +150,27 @@
     return NO;
 }
 
+-(BOOL)removeDataItemMatchingPredicate:(NSPredicate *)predicate
+{
+    BOOL result __block = NO;
+    [[self.dataSections copy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        result = [(XLDataSectionStore *)obj removeDataItemMatchingPredicate:predicate];
+        if (result){
+            *stop = YES;
+        }
+    }];
+    return result;
+}
+
+-(BOOL)removeDataItemsMatchingPredicate:(NSPredicate *)predicate
+{
+    BOOL result __block = NO;
+    [self.dataSections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        result = result || [(XLDataSectionStore *)obj removeDataItemsMatchingPredicate:predicate];
+    }];
+    return result;
+}
+
 -(void)dealloc
 {
     @try {

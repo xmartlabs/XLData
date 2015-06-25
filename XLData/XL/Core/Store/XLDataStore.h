@@ -50,7 +50,8 @@
 -(void)removeDataSection:(XLDataSectionStore *)section;
 -(void)removeDataItemAtIndexPath:(NSIndexPath *)indexPath;
 -(BOOL)removeDataItem:(id)item;
-
+-(BOOL)removeDataItemMatchingPredicate:(NSPredicate *)predicate;
+-(BOOL)removeDataItemsMatchingPredicate:(NSPredicate *)predicate;
 
 
 @end
