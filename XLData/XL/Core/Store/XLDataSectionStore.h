@@ -40,6 +40,7 @@
 
 - (id)dataAtIndex:(NSUInteger)index;
 - (void)addDataItem:(id)item;
+- (void)addDataItems:(NSArray *)items;
 - (void)addDataItems:(NSArray *)items fromIndex:(NSUInteger)index;
 - (void)removeDataItemAtIndex:(NSUInteger)indexPath;
 - (BOOL)removeDataItem:(id)item;

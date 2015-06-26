@@ -23,6 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "UserTableCell.h"
 #import "UserCollectionCell.h"
 #import "UsersDataStoreController.h"
@@ -48,6 +49,24 @@
     UICollectionViewFlowLayout *collectionLayout = (id)self.collectionView.collectionViewLayout;
     collectionLayout.itemSize = CGSizeMake(100.0, 100.0);
     
+    // add default users users
+    [self.dataStore addDataItem:@{
+                                  @"imageURL": @"http://obscure-refuge-3149.herokuapp.com/images/Bart_Simpsons.png",
+                                  @"name": @"Bart Simpsons"
+                                  }];
+    [self.dataStore addDataItem:@{
+                                  @"imageURL": @"http://obscure-refuge-3149.herokuapp.com/images/Homer_Simpsons.png",
+                                  @"name": @"Homer Simpsons"
+                                  }];
+    [self.dataStore addDataItem:@{
+                                  @"imageURL": @"http://obscure-refuge-3149.herokuapp.com/images/Lisa_Simpsons.png",
+                                  @"name": @"Lisa Simpsons"
+                                  }];
+    [self.dataStore addDataItem:@{
+                                  @"imageURL": @"http://obscure-refuge-3149.herokuapp.com/images/Marge_Simpsons.png",
+                                  @"name": @"Marge Simpsons"
+                                  }];
+    
 }
 
 #pragma mark - UITableViewDataSource
@@ -59,7 +78,7 @@
     NSDictionary * dataItem = [self.dataStore dataAtIndexPath:indexPath];
     
     cell.userName.text = [dataItem valueForKeyPath:@"name"];
-    cell.userImage.image = [UIImage imageNamed:@"default-avatar"];
+    [cell.userImage setImageWithURL:[NSURL URLWithString:[dataItem valueForKeyPath:@"imageURL"]] placeholderImage:[UIImage imageNamed:@"default-avatar"]];
     return cell;
 }
 
@@ -69,8 +88,9 @@
 {
     UserCollectionCell * cell = (UserCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     
-    //NSDictionary * dataItem = [self.dataStore dataAtIndexPath:indexPath];
-    cell.userImage.image = [UIImage imageNamed:@"default-avatar"];
+    NSDictionary * dataItem = [self.dataStore dataAtIndexPath:indexPath];
+
+    [cell.userImage setImageWithURL:[NSURL URLWithString:[dataItem valueForKeyPath:@"imageURL"]] placeholderImage:[UIImage imageNamed:@"default-avatar"]];
     return cell;
 }
 
@@ -113,7 +133,7 @@
     UIAlertAction * action = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         NSString * text = [[alertController.textFields firstObject] text];
         [self.dataStore addDataItem:@{
-                                      @"imageURL": [NSNull null],
+                                      @"imageURL": @"",
                                       @"name": [text copy]
                                       }];
     }];

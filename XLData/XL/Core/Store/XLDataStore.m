@@ -110,6 +110,11 @@
     [[self lastSection] addDataItem:item];
 }
 
+-(void)addDataItems:(NSArray *)items
+{
+    [[self lastSection] addDataItems:items];
+}
+
 -(NSUInteger)indexOfSection:(XLDataSectionStore *)section
 {
     return [self.dataSections indexOfObject:section];

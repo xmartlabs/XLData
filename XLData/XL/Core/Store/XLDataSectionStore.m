@@ -90,6 +90,11 @@
     [self insertObject:item inDataRowsAtIndex:[self countOfDataRows]];
 }
 
+-(void)addDataItems:(NSArray *)items
+{
+    [self addDataItems:items fromIndex:[self countOfDataRows]];
+}
+
 -(void)addDataItems:(NSArray *)items fromIndex:(NSUInteger)fromIndex
 {
     if (fromIndex >=  self.dataRows.count){

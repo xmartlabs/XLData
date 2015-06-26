@@ -47,6 +47,7 @@
 
 -(void)addDataSection:(XLDataSectionStore *)dataSection;
 -(void)addDataItem:(id)item;
+-(void)addDataItems:(NSArray *)items;
 -(void)removeDataSection:(XLDataSectionStore *)section;
 -(void)removeDataItemAtIndexPath:(NSIndexPath *)indexPath;
 -(BOOL)removeDataItem:(id)item;
