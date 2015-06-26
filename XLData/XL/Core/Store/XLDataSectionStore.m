@@ -100,19 +100,16 @@
     if (fromIndex >=  self.dataRows.count){
         [self insertDataRows:items atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.dataRows.count, items.count)]];
     }
-    else{  // fromIndex < self.dataRows.count
-        NSUInteger newTotalNumberOfItems  = fromIndex + items.count;
+    else {  // fromIndex < self.dataRows.count
+        NSUInteger newCountOfItems  = fromIndex + items.count;
         NSUInteger countOfReplacedObjects = MIN(items.count, self.dataRows.count - fromIndex);
-        NSIndexSet * indexSet = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(fromIndex, countOfReplacedObjects)];
-        
-        NSIndexSet * newDataIndexSet = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(0, countOfReplacedObjects)];
-        [self.dataRows replaceObjectsAtIndexes:indexSet withObjects:[items objectsAtIndexes:newDataIndexSet]];
-        
+        NSIndexSet * indexSetToReplace = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(fromIndex, countOfReplacedObjects)];
+        [self replaceDataRowsAtIndexes:indexSetToReplace withDataRows:[items objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(0, countOfReplacedObjects)]]];
         if (countOfReplacedObjects < items.count){
-            NSIndexSet * restOfItemsIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(countOfReplacedObjects - 1, items.count - countOfReplacedObjects)];
-            [self.dataRows addObjectsFromArray:[items objectsAtIndexes:restOfItemsIndexSet]];
+            NSIndexSet * indexSetNotReplacedItems = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(countOfReplacedObjects, items.count - countOfReplacedObjects)];
+            [self insertDataRows:[items objectsAtIndexes:indexSetNotReplacedItems] atIndexes:indexSetNotReplacedItems];
         }
-        [self removeDataItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(newTotalNumberOfItems, self.dataRows.count - newTotalNumberOfItems)]];
+        [self removeDataItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(newCountOfItems, self.dataRows.count - newCountOfItems)]];
     }
 }
 
@@ -254,6 +251,16 @@
 - (void)removeObjectFromDataRowsAtIndex:(NSUInteger)index
 {
     [self.dataRows removeObjectAtIndex:index];
+}
+
+-(void)replaceObjectInDataRowsAtIndex:(NSUInteger)index withObject:(id)object
+{
+    [self.dataRows replaceObjectAtIndex:index withObject:object];
+}
+
+-(void)replaceDataRowsAtIndexes:(NSIndexSet *)indexes withDataRows:(NSArray *)array
+{
+    [self.dataRows replaceObjectsAtIndexes:indexes withObjects:array];
 }
 
 

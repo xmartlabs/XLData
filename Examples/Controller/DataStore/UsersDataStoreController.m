@@ -49,7 +49,7 @@
     UICollectionViewFlowLayout *collectionLayout = (id)self.collectionView.collectionViewLayout;
     collectionLayout.itemSize = CGSizeMake(100.0, 100.0);
     
-    // add default users users
+    // add default users
     [self.dataStore addDataItem:@{
                                   @"imageURL": @"http://obscure-refuge-3149.herokuapp.com/images/Bart_Simpsons.png",
                                   @"name": @"Bart Simpsons"
