@@ -54,7 +54,7 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 @property (readonly) NSDictionary * loadedData;
 @property (readonly) NSArray * loadedDataItems;
 
--(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)self
+-(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)delegate
                       URLString:(NSString *)urlString;
 -(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)delegate
                       URLString:(NSString *)URLString
