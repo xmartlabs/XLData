@@ -178,7 +178,7 @@
 -(void)dataStoreDidChangeContent:(XLDataStore *)dataStore
 {
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
-        [self.tableView endUpdates];
+        [self tableViewEndUpdates];
     }
     else{
         [self collectionViewEndUpdates];
@@ -293,7 +293,15 @@
     return self.collectionView;
 }
 
-- (void)collectionViewEndUpdates
+-(void)tableViewEndUpdates
+{
+    if (!self.tableView.window){
+        [self reloadDataSet];
+    }
+    [self.tableView endUpdates];
+}
+
+-(void)collectionViewEndUpdates
 {
     if ([_collectionViewSectionChanges count] > 0){
         if (!self.collectionView.window) {

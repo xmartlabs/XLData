@@ -170,7 +170,7 @@
 -(void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
-        [self.tableView endUpdates];
+        [self tableViewEndUpdates];
     }
     else{
         [self collectionViewEndUpdates];
@@ -281,34 +281,46 @@
 
 #pragma mark - Helpers
 
+-(void)tableViewEndUpdates
+{
+    if (!self.tableView.window){
+        [self reloadDataSet];
+    }
+    [self.tableView endUpdates];
+}
 
 - (void)collectionViewEndUpdates
 {
     if ([_collectionViewSectionChanges count] > 0){
-        [self.collectionView performBatchUpdates:^{
-            
-            for (NSDictionary *change in _collectionViewSectionChanges){
-                [change enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
-                    
-                    NSFetchedResultsChangeType type = [key unsignedIntegerValue];
-                    switch (type)
-                    {
-                        case NSFetchedResultsChangeInsert:
-                            [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
-                            break;
-                        case NSFetchedResultsChangeDelete:
-                            [self.collectionView deleteSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
-                            break;
-                        default:
-                            NSParameterAssert(YES);
-                            break;
-                    }
-                }];
-            }
-        } completion:nil];
+        if (!self.collectionView.window) {
+            [self reloadDataSet];
+        }
+        else{
+            [self.collectionView performBatchUpdates:^{
+                
+                for (NSDictionary *change in _collectionViewSectionChanges){
+                    [change enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
+                        
+                        NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+                        switch (type)
+                        {
+                            case NSFetchedResultsChangeInsert:
+                                [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                                break;
+                            case NSFetchedResultsChangeDelete:
+                                [self.collectionView deleteSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                                break;
+                            default:
+                                NSParameterAssert(YES);
+                                break;
+                        }
+                    }];
+                }
+            } completion:nil];
+        }
     }
     else if ([_collectionViewObjectChanges count] > 0){
-        if ([self shouldReloadCollectionViewToPreventKnownIssue] || self.collectionView.window == nil) {
+        if ([self shouldReloadCollectionViewToPreventKnownIssue] || !self.collectionView.window) {
             // This is to prevent a bug in UICollectionView from occurring.
             // The bug presents itself when inserting the first object or deleting the last object in a collection view.
             // http://stackoverflow.com/questions/12611292/uicollectionview-assertion-failure
