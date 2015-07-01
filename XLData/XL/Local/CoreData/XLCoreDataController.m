@@ -33,6 +33,7 @@
 
 @implementation XLCoreDataController
 {
+    BOOL _beginUpdates;
     NSMutableArray * _collectionViewObjectChanges;
     NSMutableArray * _collectionViewSectionChanges;
     BOOL _isEmptyState;
@@ -80,6 +81,7 @@
 
 -(void)initializeXLCoreDataController
 {
+    _beginUpdates                                        = NO;
     self.fetchedResultsController                        = nil;
     _isEmptyState = NO;
 }
@@ -101,7 +103,9 @@
 {
     _fetchedResultsController.delegate = nil;
     _fetchedResultsController = fetchedResultsController;
-    _fetchedResultsController.delegate = self;
+    if ([[self dataSetView] window]){
+        _fetchedResultsController.delegate = self;
+    }
     [self reloadDataSet];
 }
 
@@ -134,7 +138,7 @@
             self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         }
         if (!self.collectionView.superview){
-            [self.view addSubview:self.tableView];;
+            [self.view addSubview:self.tableView];
         }
         if (!self.collectionView.delegate){
             self.collectionView.delegate = self;
@@ -148,6 +152,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.fetchedResultsController.delegate = self;
     [self reloadDataSet];
     [self updateEmptyDataSetOverlayIfNeeded:NO];
 }
@@ -158,11 +163,18 @@
     [[self dataSetView] flashScrollIndicators];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.fetchedResultsController.delegate = nil;
+}
+
 #pragma mark - NSFetchedResultsControllerDelegate
 
 -(void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
+    if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView && !_beginUpdates){
+        _beginUpdates = YES;
         [self.tableView beginUpdates];
     }
 }
@@ -283,10 +295,10 @@
 
 -(void)tableViewEndUpdates
 {
-    if (!self.tableView.window){
-        [self reloadDataSet];
+    if (_beginUpdates){
+        [self.tableView endUpdates];
+        _beginUpdates = NO;
     }
-    [self.tableView endUpdates];
 }
 
 - (void)collectionViewEndUpdates
@@ -515,7 +527,7 @@
         [self.fetchedResultsController performFetch:nil];
         [self reloadDataSet];
     }
-
+    
     
 }
 

@@ -115,7 +115,6 @@
     
     [cell.userImage setImageWithURL:[NSURL URLWithString:[dataItem valueForKeyPath:@"user.imageURL"]] placeholderImage:[UIImage imageNamed:@"default-avatar"]];
     return cell;
-
 }
 
 
