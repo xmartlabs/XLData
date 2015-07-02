@@ -138,7 +138,7 @@
             self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         }
         if (!self.collectionView.superview){
-            [self.view addSubview:self.tableView];
+            [self.view addSubview:self.collectionView];
         }
         if (!self.collectionView.delegate){
             self.collectionView.delegate = self;
