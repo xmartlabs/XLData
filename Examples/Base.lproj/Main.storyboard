@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8ih-Jk-BPS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8ih-Jk-BPS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -353,7 +353,7 @@
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="edy-XV-GTH">
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -446,7 +446,13 @@
                             <constraint firstItem="kwd-j6-Ep2" firstAttribute="top" secondItem="USB-JZ-LEG" secondAttribute="bottom" id="r4O-NU-tFs"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Remote Core Data" id="Lpe-DL-7mp"/>
+                    <navigationItem key="navigationItem" title="Remote Core Data" id="Lpe-DL-7mp">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="bNo-bv-yX4">
+                            <connections>
+                                <action selector="searchTapped:" destination="xDf-Jw-rz2" id="1nD-Sx-LLJ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="09T-dx-PrD" id="0Ly-2L-Spk"/>
                         <outlet property="networkStatusView" destination="kwd-j6-Ep2" id="zYu-Mo-zcb"/>
@@ -631,7 +637,13 @@
                             <constraint firstItem="TJt-V3-07f" firstAttribute="top" secondItem="eoX-mB-RLK" secondAttribute="top" id="vC9-VQ-FYl"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Remote Core Data" id="hwj-p8-goR"/>
+                    <navigationItem key="navigationItem" title="Remote Core Data" id="hwj-p8-goR">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="PEI-jf-VKQ">
+                            <connections>
+                                <action selector="searchTapped:" destination="z69-2g-gXt" id="uNn-hV-M5q"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="networkStatusView" destination="amp-xH-qle" id="CNM-Yc-Gwn"/>
                         <outlet property="tableView" destination="TJt-V3-07f" id="EP4-BV-Nog"/>

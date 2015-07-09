@@ -30,9 +30,19 @@
 #import "UsersRemoteCoreDataController.h"
 #import "CoreDataStore.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "UsersRemoteDataStoreController.h"
+
+@interface UsersRemoteCoreDataController()<UISearchControllerDelegate>
+
+@property (nonatomic, readonly) UsersRemoteDataStoreController * searchResultController;
+@property (nonatomic, readonly) UISearchController * searchController;
+
+@end
 
 @implementation UsersRemoteCoreDataController
 
+@synthesize searchController = _searchController;
+@synthesize searchResultController = _searchResultController;
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -48,17 +58,18 @@
 
 - (void)viewDidLoad
 {
-    
-    // TableView
-    [self.tableView registerClass:[UserTableCell class] forCellReuseIdentifier:@"cell"];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
     // CollectionView
     [self.collectionView registerClass:[UserCollectionCell class] forCellWithReuseIdentifier:@"cell"];
+    self.collectionView.allowsSelection = NO;
     UICollectionViewFlowLayout *collectionLayout = (id)self.collectionView.collectionViewLayout;
     collectionLayout.itemSize = CGSizeMake(100.0, 100.0);
     
     [super viewDidLoad];
+    
+    // TableView
+    [self.tableView registerClass:[UserTableCell class] forCellReuseIdentifier:@"cell"];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.allowsSelection = NO;
     
 }
 
@@ -133,5 +144,57 @@
     }];
 }
 
+#pragma mark - Actions
+
+
+- (IBAction)searchTapped:(UIBarButtonItem *)sender
+{
+    [self.searchController setActive:YES];
+}
+
+#pragma mark - UISearchController
+
+-(UISearchController *)searchController
+{
+    // UISearchController
+    if (_searchController) return _searchController;
+    self.definesPresentationContext = YES;
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultController];
+    _searchController.searchResultsUpdater = self.searchResultController;
+    _searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [_searchController.searchBar sizeToFit];
+    _searchController.hidesNavigationBarDuringPresentation = NO;
+    _searchController.delegate = self;
+    return _searchController;
+}
+
+-(UsersRemoteDataStoreController *)searchResultController
+{
+    if (_searchResultController) return _searchResultController;
+    _searchResultController = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchUsersTableViewController"];
+    _searchResultController.dataLoader.limit = 0; // no paging in search result
+    _searchResultController.isSearchResultsController = YES;
+    return _searchResultController;
+}
+
+#pragma mark -  UISearchControllerDelegate
+
+-(void)presentSearchController:(UISearchController *)searchController
+{
+    if ([searchController.delegate respondsToSelector:@selector(willPresentSearchController:)]){
+        [searchController.delegate willPresentSearchController:searchController];
+    }
+    [self.navigationController presentViewController:searchController animated:YES completion:^{
+        if ([searchController.delegate respondsToSelector:@selector(didPresentSearchController:)]){
+            [searchController.delegate didPresentSearchController:searchController];
+        }
+    }];
+}
+
+
+- (void)didPresentSearchController:(UISearchController *)searchController
+{
+    [searchController.searchBar becomeFirstResponder];
+}
 
 @end

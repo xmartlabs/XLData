@@ -32,13 +32,16 @@
 
 @interface UsersRemoteDataStoreController () <UISearchControllerDelegate>
 
-@property UsersRemoteDataStoreController * searchResultController;
-@property UISearchController * searchController;
+@property (nonatomic, readonly) UsersRemoteDataStoreController * searchResultController;
+@property (nonatomic, readonly) UISearchController * searchController;
 @property IBOutlet UIView * searchBarContainer;
 
 @end
 
 @implementation UsersRemoteDataStoreController
+
+@synthesize searchController = _searchController;
+@synthesize searchResultController = _searchResultController;
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -58,23 +61,14 @@
     // TableView
     [self.tableView registerClass:[UserTableCell class] forCellReuseIdentifier:@"cell"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.allowsSelection = NO;
     
     // CollectionView
     [self.collectionView registerClass:[UserCollectionCell class] forCellWithReuseIdentifier:@"cell"];
+    self.collectionView.allowsSelection = NO;
     UICollectionViewFlowLayout *collectionLayout = (id)self.collectionView.collectionViewLayout;
     collectionLayout.itemSize = CGSizeMake(100.0, 100.0);
     
-    
-    self.definesPresentationContext = YES;
-    self.searchResultController = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchUsersTableViewController"];
-    self.searchResultController.dataLoader.limit = 0; // no paging in search result
-    self.searchResultController.isSearchResultsController = YES;
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultController];
-    
-    self.searchController.delegate = self;
-    self.searchController.searchResultsUpdater = self.searchResultController;
-    self.searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.searchController.searchBar sizeToFit];
     if (!self.isSearchResultsController){
         if (self.searchBarContainer){
             [self.searchBarContainer addSubview:self.searchController.searchBar];
@@ -133,6 +127,31 @@
     return [HTTPSessionManager sharedClient];
 }
 
+
+#pragma mark - UISearchController
+
+-(UISearchController *)searchController
+{
+    if (_searchController) return _searchController;
+    
+    self.definesPresentationContext = YES;
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultController];
+    _searchController.delegate = self;
+    _searchController.searchResultsUpdater = self.searchResultController;
+    _searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [_searchController.searchBar sizeToFit];
+    return _searchController;
+}
+
+
+-(UsersRemoteDataStoreController *)searchResultController
+{
+    if (_searchResultController) return _searchResultController;
+    _searchResultController = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchUsersTableViewController"];
+    _searchResultController.dataLoader.limit = 0; // no paging in search result
+    _searchResultController.isSearchResultsController = YES;
+    return _searchResultController;
+}
 
 @end
 

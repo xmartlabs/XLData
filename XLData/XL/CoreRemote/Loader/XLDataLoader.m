@@ -149,7 +149,7 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
             self.loadedData = data;
             [weakSelf successulDataLoad];
             // notify via delegate
-            if (weakSelf.delegate){
+            if ([weakSelf.delegate respondsToSelector:@selector(dataLoaderDidLoadData:)]){
                 [weakSelf.delegate dataLoaderDidLoadData:self];
             }
         }
@@ -176,7 +176,7 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     _isLoadingData = NO;
     
     // notify via delegate
-    if (self.delegate){
+    if ([self.delegate respondsToSelector:@selector(dataLoaderDidFailLoadData:withError:)]){
         [self.delegate dataLoaderDidFailLoadData:self withError:error];
     }
 }
@@ -193,7 +193,7 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
         _isLoadingData = YES;
         _task = [self prepareURLSessionTask];
         [_task resume];
-        if (self.delegate){
+        if ([self.delegate respondsToSelector:@selector(dataLoaderDidStartLoadingData:)]){
             [self.delegate dataLoaderDidStartLoadingData:self];
         }
     }

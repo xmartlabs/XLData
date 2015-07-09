@@ -81,12 +81,14 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 
 @protocol XLDataLoaderDelegate <NSObject>
 
+
+@required
+-(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader;
+
 @optional
 -(void)dataLoaderDidStartLoadingData:(XLDataLoader *)dataLoader;
 -(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader;
 -(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error;
-
--(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader;
 -(id)dataLoader:(XLDataLoader *)dataLoader convertJsonItemToModelObject:(id)item;
 
 @end

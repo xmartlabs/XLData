@@ -251,6 +251,13 @@
     }
 }
 
+-(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader
+{
+    @throw [NSException exceptionWithName:NSGenericException
+                                   reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
 #pragma mark - Helpers
 
 -(void)networkingReachabilityDidChange:(NSNotification *)notification

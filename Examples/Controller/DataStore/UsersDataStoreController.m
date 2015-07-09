@@ -43,9 +43,11 @@
     // TableView
     [self.tableView registerClass:[UserTableCell class] forCellReuseIdentifier:@"cell"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.allowsSelection = NO;
     
     // CollectionView
     [self.collectionView registerClass:[UserCollectionCell class] forCellWithReuseIdentifier:@"cell"];
+    self.collectionView.allowsSelection = NO;
     UICollectionViewFlowLayout *collectionLayout = (id)self.collectionView.collectionViewLayout;
     collectionLayout.itemSize = CGSizeMake(100.0, 100.0);
     

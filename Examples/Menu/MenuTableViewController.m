@@ -68,5 +68,10 @@
     [self performSegueWithIdentifier:cellText sender:nil];
 }
 
+-(UITableViewRowAnimation)tableViewAnimationForDataStoreSectionChange:(XLDataStoreChangeType)dataStoreChange
+{
+    return UITableViewRowAnimationNone;
+}
+
 
 @end
