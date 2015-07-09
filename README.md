@@ -4,7 +4,7 @@ XLData
 By [XMARTLABS](http://xmartlabs.com).
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/xmartlabs/XLData/blob/master/LICENSE)
-[![license](https://img.shields.io/badge/pod-1.0.1-blue.svg)](https://github.com/xmartlabs/XLData/releases)
+[![license](https://img.shields.io/badge/pod-1.0.2-blue.svg)](https://github.com/xmartlabs/XLData/releases)
 
 XLData provides an elegant and concise way to load and show data sets into table and collection views.
 
@@ -264,12 +264,16 @@ Requirements
 
 Release Notes
 --------------
+Version 1.0.2
 
-Version 1.0.1 (cocoaPod)
+* Bug fixes.
+* Improve examples.
+
+Version 1.0.1
 
 * Fix podspec minor issue.
 
-Version 1.0.0 (cocoaPod)
+Version 1.0.0
 
 * Initial release
 

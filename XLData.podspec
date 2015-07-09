@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name     = 'XLData'
-  s.version  = '1.0.1'
+  s.version  = '1.0.2'
   s.license  = 'MIT'
   s.summary  = 'XLData provides an elegant and concise way to load and show data sets into UITableViews and UICollectionViews.'
   s.homepage = 'https://github.com/xmartlabs/XLData'
   s.authors  = { 'Martin Barreto' => 'martin@xmartlabs.com', 'Miguel Revetria' => 'miguel@xmartlabs.com' }
-  s.source   = { :git => 'https://github.com/xmartlabs/XLData.git', :tag => 'v1.0.1'}
+  s.source   = { :git => 'https://github.com/xmartlabs/XLData.git', :tag => 'v1.0.2'}
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
   s.ios.frameworks = 'UIKit', 'Foundation'
