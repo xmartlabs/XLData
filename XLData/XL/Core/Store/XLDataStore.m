@@ -75,7 +75,7 @@
 {
     NSUInteger result __block = 0;
     [self.dataSections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        result = [(XLDataSectionStore *)obj numberOfItems];
+        result += [(XLDataSectionStore *)obj numberOfItems];
     }];
     return result;
 }
