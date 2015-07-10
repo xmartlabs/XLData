@@ -153,7 +153,9 @@
 {
     [super viewWillAppear:animated];
     if (!((self.options & XLRemoteDataStoreControllerOptionsFetchOnlyOnce) == XLRemoteDataStoreControllerOptionsFetchOnlyOnce)|| self.isBeingPresented || self.isMovingToParentViewController){
-        [self.dataLoader forceLoad:NO];
+        if (!((self.options & XLRemoteDataStoreControllerOptionsSkipInitialFetch) == XLRemoteDataStoreControllerOptionsSkipInitialFetch)){
+            [self.dataLoader forceLoad:NO];
+        }
     }
     if ((self.options & XLRemoteDataStoreControllerOptionShowNetworkReachability) == XLRemoteDataStoreControllerOptionShowNetworkReachability){
         [[NSNotificationCenter defaultCenter] addObserver:self

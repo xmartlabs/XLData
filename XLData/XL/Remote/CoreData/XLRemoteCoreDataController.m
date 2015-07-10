@@ -149,14 +149,15 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [self.fetchedResultsController.fetchRequest setFetchLimit:(self.dataLoader.limit == 0 ? 0 : (self.dataLoader.offset + self.dataLoader.limit))];
     NSError * error;
     [self.fetchedResultsController performFetch:&error];
     self.dataStoreControllerType == XLDataStoreControllerTypeTableView ? [self.tableView reloadData] : [self.collectionView reloadData];
     
     if (!((self.options & XLRemoteDataStoreControllerOptionsFetchOnlyOnce) == XLRemoteDataStoreControllerOptionsFetchOnlyOnce)|| self.isBeingPresented || self.isMovingToParentViewController){
-        [self.dataLoader forceLoad:NO];
+        if (!((self.options & XLRemoteDataStoreControllerOptionsSkipInitialFetch) == XLRemoteDataStoreControllerOptionsSkipInitialFetch)){
+            [self.dataLoader forceLoad:NO];
+        }
     }
     if ((self.options & XLRemoteDataStoreControllerOptionShowNetworkReachability) == XLRemoteDataStoreControllerOptionShowNetworkReachability){
         [[NSNotificationCenter defaultCenter] addObserver:self

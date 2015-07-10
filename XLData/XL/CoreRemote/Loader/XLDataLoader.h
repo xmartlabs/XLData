@@ -31,9 +31,23 @@
 extern NSString * const XLDataLoaderErrorDomain;
 extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 
-@protocol XLDataLoaderDelegate;
 
-@interface XLDataLoader : NSObject
+@class XLDataLoader;
+
+@protocol XLDataLoaderDelegate <NSObject>
+
+@required
+-(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader;
+
+@optional
+-(void)dataLoaderDidStartLoadingData:(XLDataLoader *)dataLoader;
+-(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader;
+-(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error;
+-(NSDictionary *)dataLoader:(XLDataLoader *)dataLoader convertJsonDataToModelObject:(NSDictionary *)data;
+
+@end
+
+@interface XLDataLoader : NSObject <XLDataLoaderDelegate>
 {
     BOOL _isLoadingData;
     BOOL _hasMoreToLoad;
@@ -43,7 +57,7 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 }
 
 
-@property (weak) id<XLDataLoaderDelegate> delegate;
+@property (weak, nonatomic) id<XLDataLoaderDelegate> delegate;
 
 @property (readonly) NSString * URLString;
 @property NSUInteger offset;
@@ -69,27 +83,11 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 -(BOOL)hasMoreToLoad;
 
 -(void)cancelRequest; // cancels the active request
-// method called after a successful data load, if overwritten by a subclass don't forget to call super method (delegate is called from there).
--(void)successulDataLoad;
-// method called after a failure on data load, if overwritten by a subclass don't forget to call super method (delegate is called from there).
--(void)unsuccessulDataLoadWithError:(NSError *)error;
 
 @end
 
 
 
 
-@protocol XLDataLoaderDelegate <NSObject>
 
-
-@required
--(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader;
-
-@optional
--(void)dataLoaderDidStartLoadingData:(XLDataLoader *)dataLoader;
--(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader;
--(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error;
--(id)dataLoader:(XLDataLoader *)dataLoader convertJsonItemToModelObject:(id)item;
-
-@end
 

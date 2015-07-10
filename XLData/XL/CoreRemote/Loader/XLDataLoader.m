@@ -126,32 +126,21 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
 {
     NSMutableURLRequest * request = self.prepareURLRequest;
     XLDataLoader * __weak weakSelf = self;
-    return [[self.delegate sessionManagerForDataLoader:self] dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+    return [[self sessionManagerForDataLoader:self] dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         if (error) {
             if (responseObject){
                 NSMutableDictionary * newUserInfo = [error.userInfo mutableCopy];
                 [newUserInfo setObject:responseObject forKey:AFNetworkingTaskDidCompleteSerializedResponseKey];
                 NSError * newError = [NSError errorWithDomain:error.domain code:error.code userInfo:newUserInfo];
-                [weakSelf unsuccessulDataLoadWithError:newError];
+                [weakSelf dataLoaderDidFailLoadData:weakSelf withError:newError];
             }
             else{
-                [weakSelf unsuccessulDataLoadWithError:error];
+                [weakSelf dataLoaderDidFailLoadData:weakSelf withError:error];
             }
         } else {
             NSDictionary * data = [responseObject isKindOfClass:[NSDictionary class]] ? responseObject : @{ weakSelf.collectionKeyPath : responseObject };
-            if ([self.delegate respondsToSelector:@selector(dataLoader:convertJsonItemToModelObject:)]){
-                NSMutableArray * convertedData = [[NSMutableArray alloc] init];
-                [[data valueForKeyPath:self.collectionKeyPath] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    [convertedData addObject:[self.delegate dataLoader:self convertJsonItemToModelObject:obj]];
-                }];
-                [data setValue:convertedData forKeyPath:self.collectionKeyPath];
-            }
-            self.loadedData = data;
-            [weakSelf successulDataLoad];
-            // notify via delegate
-            if ([weakSelf.delegate respondsToSelector:@selector(dataLoaderDidLoadData:)]){
-                [weakSelf.delegate dataLoaderDidLoadData:self];
-            }
+            weakSelf.loadedData = [weakSelf dataLoader:weakSelf convertJsonDataToModelObject:data];
+            [weakSelf dataLoaderDidLoadData:self];
         }
     }];
 }
@@ -161,24 +150,6 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     NSError * error;
     AFHTTPSessionManager * sessionManager = [self.delegate sessionManagerForDataLoader:self];
     return [sessionManager.requestSerializer requestWithMethod:@"GET" URLString:[[NSURL URLWithString:self.URLString relativeToURL:sessionManager.baseURL] absoluteString] parameters:[self getParameters] error:&error];
-}
-
-
--(void)successulDataLoad
-{
-    _isLoadingData = NO;
-    _hasMoreToLoad = (self.limit != 0 && (self.loadedDataItems.count >= self.limit));
-}
-
--(void)unsuccessulDataLoadWithError:(NSError *)error
-{
-    // change flags
-    _isLoadingData = NO;
-    
-    // notify via delegate
-    if ([self.delegate respondsToSelector:@selector(dataLoaderDidFailLoadData:withError:)]){
-        [self.delegate dataLoaderDidFailLoadData:self withError:error];
-    }
 }
 
 -(void)cancelRequest
@@ -193,9 +164,7 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
         _isLoadingData = YES;
         _task = [self prepareURLSessionTask];
         [_task resume];
-        if ([self.delegate respondsToSelector:@selector(dataLoaderDidStartLoadingData:)]){
-            [self.delegate dataLoaderDidStartLoadingData:self];
-        }
+        [self dataLoaderDidStartLoadingData:self];
     }
 }
 
@@ -226,6 +195,57 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     _parameters = [[NSMutableDictionary alloc] init];
     return _parameters;
 }
+
+-(id<XLDataLoaderDelegate>)delegate
+{
+    return _delegate ?: self;
+}
+
+#pragma mark - XLDataLoaderDelegate
+
+-(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader
+{
+    if (self.delegate != self){
+        return [self.delegate sessionManagerForDataLoader:dataLoader];
+    }
+    @throw [NSException exceptionWithName:NSGenericException
+                                   reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+-(void)dataLoaderDidStartLoadingData:(XLDataLoader *)dataLoader
+{
+    if (self.delegate != self &&  [self.delegate respondsToSelector:@selector(dataLoaderDidStartLoadingData:)]){
+        [self.delegate dataLoaderDidStartLoadingData:dataLoader];
+    }
+}
+
+-(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader
+{
+    _isLoadingData = NO;
+    _hasMoreToLoad = (self.limit != 0 && (self.loadedDataItems.count >= self.limit));
+    if (self.delegate != self && [self.delegate respondsToSelector:@selector(dataLoaderDidLoadData:)]){
+        [self.delegate dataLoaderDidLoadData:dataLoader];
+    }
+}
+
+-(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error
+{
+    // change flags
+    _isLoadingData = NO;
+    if (self.delegate != self && [self.delegate respondsToSelector:@selector(dataLoaderDidFailLoadData:withError:)]){
+        [self.delegate dataLoaderDidFailLoadData:self withError:error];
+    }
+}
+
+-(NSDictionary *)dataLoader:(XLDataLoader *)dataLoader convertJsonDataToModelObject:(NSDictionary *)data
+{
+    if (self.delegate != self &&  [self.delegate respondsToSelector:@selector(dataLoader:convertJsonDataToModelObject:)]){
+        return [self.delegate dataLoader:dataLoader convertJsonDataToModelObject:data];
+    }
+    return data;
+}
+
 
 
 @end

@@ -33,6 +33,7 @@ typedef NS_OPTIONS(NSUInteger, XLRemoteControllerOptions) {
     XLRemoteDataStoreControllerOptionShowNetworkReachability = 1 << 3,
     XLRemoteDataStoreControllerOptionShowNetworkConnectivityErrors = 1 << 4,
     XLRemoteDataStoreControllerOptionsFetchOnlyOnce = 1 << 5,
+    XLRemoteDataStoreControllerOptionsSkipInitialFetch = 1 << 6,
     XLRemoteDataStoreControllerOptionDefault = XLRemoteDataStoreControllerOptionSupportRefreshControl | XLRemoteDataStoreControllerOptionPagingEnabled | XLRemoteDataStoreControllerOptionShowNetworkReachability
 };
 
