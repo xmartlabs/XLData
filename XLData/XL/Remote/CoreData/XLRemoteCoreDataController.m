@@ -89,10 +89,16 @@
 -(UIView *)networkStatusView
 {
     if (!_networkStatusView){
-        _networkStatusView = [[XLNetworkStatusView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+        _networkStatusView = [XLNetworkStatusView new];
+        _networkStatusView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.view addSubview:_networkStatusView];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[networkStatusView]|" options:0 metrics:0 views:@{@"networkStatusView": _networkStatusView}]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide][networkStatusView(30)]" options:0 metrics:0 views:@{@"networkStatusView": _networkStatusView, @"topLayoutGuide": self.topLayoutGuide}]];
+        [self.view sendSubviewToBack:_networkStatusView];
     }
     return _networkStatusView;
 }
+
 
 -(id<XLRemoteControllerDelegate>)remoteControllerDelegate
 {
