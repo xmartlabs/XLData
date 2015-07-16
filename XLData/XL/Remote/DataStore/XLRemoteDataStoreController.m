@@ -181,11 +181,6 @@
 
 #pragma mark - XLDataControllerDelegate
 
--(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader
-{
-    [[self.dataStore lastSection] addDataItems:dataLoader.loadedDataItems fromIndex:dataLoader.offset];
-}
-
 -(void)dataController:(UIViewController *)controller showNoInternetConnection:(BOOL)animated
 {
     __weak __typeof(self)weakSelf = self;
@@ -238,7 +233,6 @@
         [scrollView.infiniteScrollingView stopAnimating];
         [self.refreshControl endRefreshing];
         scrollView.infiniteScrollingView.enabled = dataLoader.hasMoreToLoad;
-        [self.remoteControllerDelegate dataController:self updateDataWithDataLoader:dataLoader];
     }
 }
 
@@ -251,6 +245,14 @@
     if (error.code != NSURLErrorCancelled && (error.code != NSURLErrorNotConnectedToInternet || ((self.options & XLRemoteDataStoreControllerOptionShowNetworkConnectivityErrors) == XLRemoteDataStoreControllerOptionShowNetworkConnectivityErrors))){
         [self showError:error];
     }
+}
+
+#pragma mark - XLDataLoaderStoreDelegate
+
+-(void)dataLoaderUpdateDataStore:(XLDataLoader *)dataLoader completionHandler:(void (^)())completionHandler
+{
+    [[self.dataStore lastSection] addDataItems:dataLoader.loadedDataItems fromIndex:dataLoader.offset];
+    completionHandler();
 }
 
 #pragma mark - Helpers

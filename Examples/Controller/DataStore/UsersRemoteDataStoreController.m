@@ -48,7 +48,9 @@
     self = [super initWithCoder:coder];
     if (self) {
         self.isSearchResultsController = NO;
-        self.dataLoader =  [[XLDataLoader alloc] initWithDelegate:self URLString:@"/mobile/users.json" offsetParamName:@"offset" limitParamName:@"limit" searchStringParamName:@"filter"];
+        self.dataLoader =  [[XLDataLoader alloc] initWithURLString:@"/mobile/users.json" offsetParamName:@"offset" limitParamName:@"limit" searchStringParamName:@"filter"];
+        self.dataLoader.delegate = self;
+        self.dataLoader.storeDelegate = self;
         self.dataLoader.limit = 4;
         self.dataLoader.collectionKeyPath = @"";
     }
@@ -126,7 +128,6 @@
 {
     return [HTTPSessionManager sharedClient];
 }
-
 
 #pragma mark - UISearchController
 

@@ -30,7 +30,7 @@
 #import "XLSearchBar.h"
 #import "XLRemoteControllerDelegate.h"
 
-@interface XLRemoteDataStoreController : XLDataStoreController< XLDataLoaderDelegate, UISearchResultsUpdating, XLRemoteControllerDelegate>
+@interface XLRemoteDataStoreController : XLDataStoreController<XLDataLoaderDelegate, XLDataLoaderStoreDelegate, UISearchResultsUpdating, XLRemoteControllerDelegate>
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;

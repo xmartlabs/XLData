@@ -27,7 +27,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "XLDataLoader.h"
 
-NSString * const XLDataLoaderErrorDomain = @"XLDataLoaderErrorDomain";
+NSString * const kXLDataLoaderErrorDomain = @"XLDataLoaderErrorDomain";
 NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data";
 
 @interface XLDataLoader()
@@ -57,12 +57,11 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
 @synthesize searchString = _searchString;
 
 
--(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)delegate URLString:(NSString *)urlString
+-(instancetype)initWithURLString:(NSString *)urlString
 {
     self = [super init];
     if (self){
         [self setDefaultValues];
-        self.delegate = delegate;
         _URLString = urlString;
         _offsetParamName = @"offset";
         _limitParamName = @"limit";
@@ -72,9 +71,9 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     return self;
 }
 
--(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)delegate URLString:(NSString *)urlString offsetParamName:(NSString *)offsetParamName limitParamName:(NSString *)limitParamName searchStringParamName:(NSString *)searchStringParamName
+-(instancetype)initWithURLString:(NSString *)urlString offsetParamName:(NSString *)offsetParamName limitParamName:(NSString *)limitParamName searchStringParamName:(NSString *)searchStringParamName
 {
-    self = [self initWithDelegate:delegate URLString:urlString];
+    self = [self initWithURLString:urlString];
     if (self){
         self.offsetParamName = offsetParamName;
         self.limitParamName = limitParamName;
@@ -139,8 +138,23 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
             }
         } else {
             NSDictionary * data = [responseObject isKindOfClass:[NSDictionary class]] ? responseObject : @{ weakSelf.collectionKeyPath : responseObject };
-            weakSelf.loadedData = [weakSelf dataLoader:weakSelf convertJsonDataToModelObject:data];
-            [weakSelf dataLoaderDidLoadData:self];
+            if ([weakSelf.storeDelegate respondsToSelector:@selector(dataLoader:convertJsonDataToModelObject:)]){
+                data = [self.storeDelegate dataLoader:weakSelf convertJsonDataToModelObject:data];
+            }
+            self.loadedData = data;
+            void (^completionHandler)() = ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _isLoadingData = NO;
+                    _hasMoreToLoad = (weakSelf.limit != 0 && (weakSelf.loadedDataItems.count >= weakSelf.limit));
+                    [weakSelf dataLoaderDidLoadData:weakSelf];
+                });
+            };
+            if ([weakSelf.storeDelegate respondsToSelector:@selector(dataLoaderUpdateDataStore:completionHandler:)]){
+                [weakSelf.storeDelegate dataLoaderUpdateDataStore:weakSelf completionHandler:completionHandler];
+            }
+            else{
+                completionHandler();
+            }
         }
     }];
 }
@@ -196,11 +210,6 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     return _parameters;
 }
 
--(id<XLDataLoaderDelegate>)delegate
-{
-    return _delegate ?: self;
-}
-
 #pragma mark - XLDataLoaderDelegate
 
 -(AFHTTPSessionManager *)sessionManagerForDataLoader:(XLDataLoader *)dataLoader
@@ -220,15 +229,6 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     }
 }
 
--(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader
-{
-    _isLoadingData = NO;
-    _hasMoreToLoad = (self.limit != 0 && (self.loadedDataItems.count >= self.limit));
-    if (self.delegate != self && [self.delegate respondsToSelector:@selector(dataLoaderDidLoadData:)]){
-        [self.delegate dataLoaderDidLoadData:dataLoader];
-    }
-}
-
 -(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error
 {
     // change flags
@@ -238,12 +238,11 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     }
 }
 
--(NSDictionary *)dataLoader:(XLDataLoader *)dataLoader convertJsonDataToModelObject:(NSDictionary *)data
+-(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader
 {
-    if (self.delegate != self &&  [self.delegate respondsToSelector:@selector(dataLoader:convertJsonDataToModelObject:)]){
-        return [self.delegate dataLoader:dataLoader convertJsonDataToModelObject:data];
+    if (self.delegate != self && [self.delegate respondsToSelector:@selector(dataLoaderDidLoadData:)]){
+        [self.delegate dataLoaderDidLoadData:self];
     }
-    return data;
 }
 
 

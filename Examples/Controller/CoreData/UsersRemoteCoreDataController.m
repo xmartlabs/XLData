@@ -48,8 +48,10 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self){
-        self.dataLoader = [[XLDataLoader alloc] initWithDelegate:self URLString:@"/mobile/users.json"];
+        self.dataLoader = [[XLDataLoader alloc] initWithURLString:@"/mobile/users.json"];
         self.dataLoader.limit = 4;
+        self.dataLoader.delegate = self;
+        self.dataLoader.storeDelegate = self;
         
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[User getFetchRequest] managedObjectContext:[CoreDataStore mainQueueContext] sectionNameKeyPath:nil cacheName:nil];
     }
@@ -110,9 +112,9 @@
     return [HTTPSessionManager sharedClient];
 }
 
-#pragma mark - XLRemoteControllerDelegate
+#pragma mark - XLDataLoaderStoreDelegate
 
--(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader
+-(void)dataLoaderUpdateDataStore:(XLDataLoader *)dataLoader completionHandler:(void (^)())completionHandler
 {
     NSUInteger offset = dataLoader.offset;
     NSUInteger limit = dataLoader.limit;
@@ -141,8 +143,10 @@
         }
         //
         [CoreDataStore savePrivateQueueContext];
+        completionHandler();
     }];
 }
+
 
 #pragma mark - Actions
 

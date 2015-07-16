@@ -42,8 +42,6 @@ typedef NS_OPTIONS(NSUInteger, XLRemoteControllerOptions) {
 @protocol XLRemoteControllerDelegate
 
 @required
--(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader;
-
 -(void)dataController:(UIViewController *)controller showNoInternetConnection:(BOOL)animated;
 -(void)dataController:(UIViewController *)controller hideNoInternetConnection:(BOOL)animated;
 

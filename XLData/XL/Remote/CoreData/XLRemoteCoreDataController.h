@@ -31,7 +31,7 @@
 
 @protocol XLRemoteControllerDelegate;
 
-@interface XLRemoteCoreDataController : XLCoreDataController<XLDataLoaderDelegate, UISearchResultsUpdating, XLRemoteControllerDelegate>
+@interface XLRemoteCoreDataController : XLCoreDataController<XLDataLoaderDelegate, XLDataLoaderStoreDelegate, UISearchResultsUpdating, XLRemoteControllerDelegate>
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;

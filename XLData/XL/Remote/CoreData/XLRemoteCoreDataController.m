@@ -242,7 +242,6 @@
         [scrollView.infiniteScrollingView stopAnimating];
         [self.refreshControl endRefreshing];
         scrollView.infiniteScrollingView.enabled = dataLoader.hasMoreToLoad;
-        [self.remoteControllerDelegate dataController:self updateDataWithDataLoader:dataLoader];
         [self.fetchedResultsController.fetchRequest setFetchLimit:(self.dataLoader.limit == 0 ? 0 : (self.dataLoader.offset + self.dataLoader.limit))];
     }
 }
@@ -264,6 +263,7 @@
                                    reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__]
                                  userInfo:nil];
 }
+
 
 #pragma mark - Helpers
 

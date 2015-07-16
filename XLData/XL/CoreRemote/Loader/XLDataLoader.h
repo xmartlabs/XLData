@@ -28,7 +28,7 @@
 #import "XLDataLoader.h"
 
 
-extern NSString * const XLDataLoaderErrorDomain;
+extern NSString * const kXLDataLoaderErrorDomain;
 extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 
 
@@ -43,7 +43,14 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 -(void)dataLoaderDidStartLoadingData:(XLDataLoader *)dataLoader;
 -(void)dataLoaderDidLoadData:(XLDataLoader *)dataLoader;
 -(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error;
+
+@end
+
+@protocol XLDataLoaderStoreDelegate <NSObject>
+
+@optional
 -(NSDictionary *)dataLoader:(XLDataLoader *)dataLoader convertJsonDataToModelObject:(NSDictionary *)data;
+-(void)dataLoaderUpdateDataStore:(XLDataLoader *)dataLoader completionHandler:(void (^)())completionHandler;
 
 @end
 
@@ -58,6 +65,7 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 
 
 @property (weak, nonatomic) id<XLDataLoaderDelegate> delegate;
+@property (weak, nonatomic) id<XLDataLoaderStoreDelegate> storeDelegate;
 
 @property (readonly) NSString * URLString;
 @property NSUInteger offset;
@@ -68,10 +76,8 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 @property (readonly) NSDictionary * loadedData;
 @property (readonly) NSArray * loadedDataItems;
 
--(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)delegate
-                      URLString:(NSString *)urlString;
--(instancetype)initWithDelegate:(id<XLDataLoaderDelegate>)delegate
-                      URLString:(NSString *)URLString
+-(instancetype)initWithURLString:(NSString *)urlString;
+-(instancetype)initWithURLString:(NSString *)URLString
                 offsetParamName:(NSString *)offsetParamName
                  limitParamName:(NSString *)limitParamName
           searchStringParamName:(NSString *)searchStringParamName;
