@@ -191,10 +191,6 @@
 
 #pragma mark - XLRemoteControllerDelegate
 
--(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader
-{
-}
-
 -(void)dataController:(UIViewController *)controller showNoInternetConnection:(BOOL)animated
 {
     __weak __typeof(self)weakSelf = self;
@@ -274,7 +270,8 @@
 
 -(void)updateNoInternetConnectionOverlayIfNeeded:(BOOL)animated
 {
-    if ((_isConnectedToInternet = ([[self.dataLoader.delegate sessionManagerForDataLoader:self.dataLoader].reachabilityManager
+    AFHTTPSessionManager * sessionManager;
+    if ( !(sessionManager = ([self sessionManagerForDataLoader:self.dataLoader])) || (_isConnectedToInternet = ([sessionManager.reachabilityManager
                                     networkReachabilityStatus] != AFNetworkReachabilityStatusNotReachable))){
         [self.remoteControllerDelegate dataController:self hideNoInternetConnection:animated];
     }
