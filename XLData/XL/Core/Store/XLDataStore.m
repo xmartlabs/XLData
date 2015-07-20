@@ -110,6 +110,18 @@
     [self insertObject:dataSection inDataSectionsAtIndex:index];
 }
 
+-(void)addDataSection:(XLDataSectionStore *)dataSection beforeSection:(XLDataSectionStore *)beforeSection
+{
+    NSUInteger index;
+    if ((index = [self indexOfSection:beforeSection]) != NSNotFound) {
+        [self insertObject:dataSection inDataSectionsAtIndex:index];
+    }
+    else{
+        // if beforeSection does not exist we insert at the end.
+        [self addDataSection:dataSection];
+    }
+}
+
 -(void)addDataSection:(XLDataSectionStore *)dataSection afterSection:(XLDataSectionStore *)afterSection
 {
     NSUInteger index;
