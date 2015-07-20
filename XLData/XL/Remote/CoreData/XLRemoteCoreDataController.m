@@ -184,8 +184,14 @@
     self.fetchedResultsController.fetchRequest.fetchOffset = 0;
     self.fetchedResultsController.fetchRequest.fetchLimit = self.dataLoader.limit;
     [self.fetchedResultsController performFetch:nil];
-    [[self dataSetView] reloadData];
-    [self.dataLoader forceLoad:YES];
+    if (self.dataLoader){
+        [[self dataSetView] reloadData];
+        [self.dataLoader forceLoad:YES];
+    }
+    else{
+        [[[self dataSetView] infiniteScrollingView] stopAnimating];
+        [self.refreshControl endRefreshing];
+    }
 }
 
 

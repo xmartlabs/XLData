@@ -174,8 +174,13 @@
 }
 
 -(void)refreshView:(UIRefreshControl *)refresh {
-    [[self dataSetView] reloadData];
-    [self.dataLoader forceLoad:YES];
+    if (self.dataLoader){
+        [[self dataSetView] reloadData];
+        [self.dataLoader forceLoad:YES];
+    }else{
+        [[[self dataSetView] infiniteScrollingView] stopAnimating];
+        [self.refreshControl endRefreshing];
+    }
 }
 
 
