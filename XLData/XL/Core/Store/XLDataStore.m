@@ -105,6 +105,23 @@
     [self insertObject:dataSection inDataSectionsAtIndex:[self countOfDataSections]];
 }
 
+-(void)addDataSection:(XLDataSectionStore *)dataSection atIndex:(NSUInteger)index
+{
+    [self insertObject:dataSection inDataSectionsAtIndex:index];
+}
+
+-(void)addDataSection:(XLDataSectionStore *)dataSection afterSection:(XLDataSectionStore *)afterSection
+{
+    NSUInteger index;
+    if ((index = [self indexOfSection:afterSection]) != NSNotFound) {
+        [self insertObject:dataSection inDataSectionsAtIndex:index+1];
+    }
+    else{
+        // if afterSection does not exist we insert at the end.
+        [self addDataSection:dataSection];
+    }
+}
+
 -(void)addDataItem:(id)item
 {
     [[self lastSection] addDataItem:item];
