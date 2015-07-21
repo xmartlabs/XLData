@@ -174,8 +174,13 @@
 }
 
 -(void)refreshView:(UIRefreshControl *)refresh {
-    [[self dataSetView] reloadData];
-    [self.dataLoader forceLoad:YES];
+    if (self.dataLoader){
+        [[self dataSetView] reloadData];
+        [self.dataLoader forceLoad:YES];
+    }else{
+        [[[self dataSetView] infiniteScrollingView] stopAnimating];
+        [self.refreshControl endRefreshing];
+    }
 }
 
 
@@ -264,8 +269,9 @@
 
 -(void)updateNoInternetConnectionOverlayIfNeeded:(BOOL)animated
 {
-    if ((_isConnectedToInternet = ([[self.dataLoader.delegate sessionManagerForDataLoader:self.dataLoader].reachabilityManager
-          networkReachabilityStatus] != AFNetworkReachabilityStatusNotReachable))){
+    AFHTTPSessionManager * sessionManager;
+    if ( !(sessionManager = ([self sessionManagerForDataLoader:self.dataLoader])) || (_isConnectedToInternet = ([sessionManager.reachabilityManager
+                                                                                                                 networkReachabilityStatus] != AFNetworkReachabilityStatusNotReachable))){
         [self.remoteControllerDelegate dataController:self hideNoInternetConnection:animated];
     }
     else{

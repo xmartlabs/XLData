@@ -184,16 +184,18 @@
     self.fetchedResultsController.fetchRequest.fetchOffset = 0;
     self.fetchedResultsController.fetchRequest.fetchLimit = self.dataLoader.limit;
     [self.fetchedResultsController performFetch:nil];
-    [[self dataSetView] reloadData];
-    [self.dataLoader forceLoad:YES];
+    if (self.dataLoader){
+        [[self dataSetView] reloadData];
+        [self.dataLoader forceLoad:YES];
+    }
+    else{
+        [[[self dataSetView] infiniteScrollingView] stopAnimating];
+        [self.refreshControl endRefreshing];
+    }
 }
 
 
 #pragma mark - XLRemoteControllerDelegate
-
--(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader
-{
-}
 
 -(void)dataController:(UIViewController *)controller showNoInternetConnection:(BOOL)animated
 {
@@ -274,7 +276,8 @@
 
 -(void)updateNoInternetConnectionOverlayIfNeeded:(BOOL)animated
 {
-    if ((_isConnectedToInternet = ([[self.dataLoader.delegate sessionManagerForDataLoader:self.dataLoader].reachabilityManager
+    AFHTTPSessionManager * sessionManager;
+    if ( !(sessionManager = ([self sessionManagerForDataLoader:self.dataLoader])) || (_isConnectedToInternet = ([sessionManager.reachabilityManager
                                     networkReachabilityStatus] != AFNetworkReachabilityStatusNotReachable))){
         [self.remoteControllerDelegate dataController:self hideNoInternetConnection:animated];
     }
