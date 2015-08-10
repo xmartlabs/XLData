@@ -27,7 +27,7 @@
 @import CoreData;
 #import "XLData.h"
 
-@interface XLCoreDataController : UIViewController<NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface XLCoreDataController : UIViewController<NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, XLDataController>
 
 /**
  *  Convenient Initializer to create a view controller that handles a table view or a collection view.

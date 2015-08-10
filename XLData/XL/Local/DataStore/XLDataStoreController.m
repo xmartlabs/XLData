@@ -461,7 +461,7 @@
 -(void)updateEmptyDataSetOverlayIfNeeded:(BOOL)animated
 {
     if (self.emptyDataSetView){
-        if ((_isEmptyState = self.dataStore.isEmpty)) {
+        if ((_isEmptyState = [self isEmptyDataSet])) {
             [self showEmptyStateView:animated];
         }
         else{
@@ -509,5 +509,13 @@
 {
     return UITableViewRowAnimationAutomatic;
 }
+
+#pragma mark - XLDataController
+
+-(BOOL)isEmptyDataSet
+{
+    return self.dataStore.isEmpty;
+}
+
 
 @end

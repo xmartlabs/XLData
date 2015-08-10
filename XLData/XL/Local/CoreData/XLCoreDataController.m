@@ -469,7 +469,7 @@
 -(void)updateEmptyDataSetOverlayIfNeeded:(BOOL)animated
 {
     if (self.emptyDataSetView){
-        if ((_isEmptyState = (self.fetchedResultsController.sections.count == 0 || (self.fetchedResultsController.sections.count == 1 && ([self.fetchedResultsController.sections[0] numberOfObjects] == 0)))))
+        if ((_isEmptyState = [self isEmptyDataSet]))
         {
             [self showEmptyStateView:animated];
         }
@@ -536,6 +536,13 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
     [self updateFetchedResultControllerIfNeeded];
+}
+
+#pragma mark - XLDataController
+
+-(BOOL)isEmptyDataSet
+{
+    return (self.fetchedResultsController.sections.count == 0 || (self.fetchedResultsController.sections.count == 1 && ([self.fetchedResultsController.sections[0] numberOfObjects] == 0)));
 }
 
 
