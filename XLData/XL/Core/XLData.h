@@ -31,3 +31,9 @@ typedef NS_ENUM(NSUInteger, XLDataControllerType) {
     XLDataStoreControllerTypeTableView,
     XLDataStoreControllerTypeCollectionView
 };
+
+@protocol XLDataController <NSObject>
+
+-(BOOL)isEmptyDataSet;
+
+@end

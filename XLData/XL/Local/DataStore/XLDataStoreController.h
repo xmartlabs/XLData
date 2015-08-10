@@ -27,7 +27,7 @@
 #import "XLData.h"
 @import UIKit;
 
-@interface XLDataStoreController : UIViewController<XLDataStoreDelegate,  UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface XLDataStoreController : UIViewController<XLDataStoreDelegate,  UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, XLDataController>
 
 /**
  *  Convenient Initializer to create a view controller that handles a table view or a collection view.
