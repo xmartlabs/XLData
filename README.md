@@ -6,7 +6,7 @@ By [XMARTLABS](http://xmartlabs.com).
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/xmartlabs/XLData/blob/master/LICENSE)
 [![license](https://img.shields.io/badge/pod-1.0.2-blue.svg)](https://github.com/xmartlabs/XLData/releases)
 
-XLData provides an elegant and concise way to load and show data sets into table and collection views.
+XLData provides an elegant and concise way to load, synchronize and show data sets into table and collection views.
 
 Purpose
 --------------

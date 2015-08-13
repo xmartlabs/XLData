@@ -32,8 +32,15 @@ typedef NS_ENUM(NSUInteger, XLDataControllerType) {
     XLDataStoreControllerTypeCollectionView
 };
 
+/**
+ * This protocol is conformed by XLDataStoreController & XLCoreDataController
+ */
 @protocol XLDataController <NSObject>
 
+
+/**
+ *  You can override XLDataStoreController, XLCoreDataController implementation of this method to determine when a data set is empty. Sometimes an empty section represent an empty data set, sometimes a data set without any section represent an empty data set. The value of this method is used to show hide the emptyDataSetView. 
+ */
 -(BOOL)isEmptyDataSet;
 
 @end
