@@ -4,20 +4,22 @@ XLData
 By [XMARTLABS](http://xmartlabs.com).
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/xmartlabs/XLData/blob/master/LICENSE)
-[![license](https://img.shields.io/badge/pod-1.0.2-blue.svg)](https://github.com/xmartlabs/XLData/releases)
+[![license](https://img.shields.io/badge/pod-2.0.0-blue.svg)](https://github.com/xmartlabs/XLData/releases)
 
-XLData provides an elegant and concise way to load, synchronize and show data sets into table and collection views.
+XLData provides an elegant, flexible and concise way to load, synchronize and show data sets into table and collection views.
 
 Purpose
 --------------
 
-You probably implement table/collection view controllers on a daily basis since a large part of an iOS app involves showing data in these views.
+You probably implement table/collection view controllers on a daily basis since a large part of an iOS app involves loading, synchronizing and showing data in these views.
 
-The data you need to show might be stored in memory, a Core Data db and often needs to be fetched from a json/xml API endpoint.  
+The data you need to show might be stored in memory, a Core Data db, and often needs to be fetched from a json/xml API endpoint.  
 
-But there is more than just showing the data: we may have to handle empty view state, errors, show "offline" status, add support for pagination, search, etc.
+Apart from loading, synchronizing and showing data sets into a UITableView/UICollectionView it also handles the view empty state and internet reachability changes by showing or hiding a proper view when the table becomes empty/no-empty or internet reachability changes respectively.
 
-Whatever your source of data, XLData provides an elegant and concise solution to handle all challenges introduced above with minimal effort.
+It supports static and dynamic data sets. In order to support dynamic data sets efficiently XLData provides support for pagination and search, as well as a super simple way to fetch data from an API endpoint using AFNetworking.
+
+Whatever your source of data, XLData provides an elegant and concise solution to handle all challenges introduced above with minimal effort. We are sure you will love XLData!
 
 ![Gif Example](Examples/XLData.gif)
 
@@ -35,21 +37,21 @@ What XLData does
 Usage
 -------------------
 
-`XLData` supports many different scenarios from in-memory data sets to core data data sets and  remote sync of data sets. In this section we'll briefly explain how it can be used in typical scenarios. For a more detailed explanation please take a look at the [Examples ](/tree/master/Examples) folder.
+`XLData` supports different scenarios from in-memory to core data data sets, and remote data set sync. In this section we'll briefly explain how it can be used in typical scenarios. For a more detailed explanation please take a look at the [Examples ](/tree/master/Examples) folder.
 
 
 ####Data Store table/collection view controller
 
-* Make your concrete view controller extends from `XLDataStoreController`
+* Create a view controller object that extends from `XLDataStoreController`
 
-* Add sections (`XLDataSectionStore` instance) and then items to a section. Items can be of any type ;)
+* Add sections (`XLDataSectionStore` objects) and then items (any object) to a section. Items can be of any type ;)
 ```obj-c
 [self.dataStore addDataSection:[XLDataSectionStore dataSectionStoreWithTitle:@"Example"]];
 [self.dataStore addDataItem:@{@"title": "Row title 1"}];
 [self.dataStore addDataItem:@{@"title": "Row title 2"}];
 ```
 
-* Return the cell:
+* Provide either the table or collection view cell:
 ```obj-c
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -62,9 +64,13 @@ Usage
 }
 ```
 
+Any changes made to the data store will be automatically reflected in the table/collection view. ;)
+
+You can see an example of this running the Demo app and tapping the cell "Data Store TableView" or "Data Store CollectionView".
+
 ####Data Store table/collection view controller sync with remote xml/json endpoint
 
-* Make your concrete view controller extends from `XLRemoteDataStoreController`
+* Create a view controller object that extends from `XLRemoteDataStoreController`
 
 * Set up the `dataLoader` property  by following these steps:
 ```obj-c
@@ -101,14 +107,19 @@ self.dataLoader.parameters[@"paramName2"] = paramValue2;
 }
 ```
 
+XLData will automatically update the dataStore using the data fetched by its `XLDataLoader` instance and the current property values such as offset and limit.
+
 * **Optional** Override a method to update the `XLDataStore` in a different way. By default XLData appends the fetched items to the last section of `XLDataStore`.
 ```obj-c
 -(void)dataController:(UIViewController *)controller updateDataWithDataLoader:(XLDataLoader *)dataLoader`
 ```
 
+You can see an example of this running the Demo app and tapping the cell "Remote Data Store TableView" or "Remote Data Store CollectionView".
+
+
 ####Core Data table/collection view controller
 
-* Make your concrete view controller extends from `XLCoreDataController`.
+* Create a view controller object that extends from `XLCoreDataController`
 
 * Set up `fetchedResultsController` property:
 ```obj-c
