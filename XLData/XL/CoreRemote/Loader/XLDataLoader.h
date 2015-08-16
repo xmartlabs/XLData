@@ -76,7 +76,7 @@ extern NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse;
 @property (readonly) NSDictionary * loadedData;
 @property (readonly) NSArray * loadedDataItems;
 
--(instancetype)initWithURLString:(NSString *)urlString;
+-(instancetype)initWithURLString:(NSString *)URLString;
 -(instancetype)initWithURLString:(NSString *)URLString
                 offsetParamName:(NSString *)offsetParamName
                  limitParamName:(NSString *)limitParamName
