@@ -48,6 +48,7 @@
     self = [self initWithNibName:nil bundle:nil];
     if (self){
         self.dataStoreControllerType = controllerType;
+        self.rowAnimationType = UITableViewRowAnimationAutomatic;
     }
     return self;
 }
@@ -84,6 +85,7 @@
     _beginUpdates                                        = NO;
     self.fetchedResultsController                        = nil;
     _isEmptyState = NO;
+    _rowAnimationType = UITableViewRowAnimationAutomatic;
 }
 
 -(void)reloadDataSet
