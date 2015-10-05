@@ -48,7 +48,6 @@
     self = [self initWithNibName:nil bundle:nil];
     if (self){
         self.dataStoreControllerType = controllerType;
-        self.rowAnimationType = UITableViewRowAnimationAutomatic;
     }
     return self;
 }
