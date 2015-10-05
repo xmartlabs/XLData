@@ -195,10 +195,10 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case NSFetchedResultsChangeInsert:
-                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:self.rowAnimationType];
                 break;
             case NSFetchedResultsChangeDelete:
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:self.rowAnimationType];
                 break;
             default:
                 NSParameterAssert(YES);
@@ -226,17 +226,17 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case NSFetchedResultsChangeInsert:
-                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:self.rowAnimationType];
                 break;
             case NSFetchedResultsChangeDelete:
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:self.rowAnimationType];
                 break;
             case NSFetchedResultsChangeMove:
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:self.rowAnimationType];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:self.rowAnimationType];
                 break;
             case NSFetchedResultsChangeUpdate:
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:self.rowAnimationType];
                 break;
         }
     }
