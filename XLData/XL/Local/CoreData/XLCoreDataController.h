@@ -60,6 +60,8 @@
  */
 @property (nonatomic) IBOutlet UIView * emptyDataSetView;
 
+@property (nonatomic) UITableViewRowAnimation rowAnimationType;
+
 -(void)reloadDataSet;
 
 
