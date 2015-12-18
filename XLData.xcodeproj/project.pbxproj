@@ -326,7 +326,7 @@
 		284F19BF1AFA5F2100801CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Xmartlabs;
 				TargetAttributes = {
 					284F19C61AFA5F2100801CEA = {
@@ -483,6 +483,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -552,6 +553,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "$(SRCROOT)/XLData/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmartlabs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = XLData;
 				PROVISIONING_PROFILE = "";
 			};
@@ -567,6 +569,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "$(SRCROOT)/XLData/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmartlabs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = XLData;
 				PROVISIONING_PROFILE = "";
 			};
@@ -586,6 +589,7 @@
 				);
 				INFOPLIST_FILE = XLDataTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Xmartlabs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = XLDataTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/XLData.app/XLData";
 			};
@@ -601,6 +605,7 @@
 				);
 				INFOPLIST_FILE = XLDataTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Xmartlabs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = XLDataTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/XLData.app/XLData";
 			};
