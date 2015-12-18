@@ -200,7 +200,7 @@
     fetchRequest.predicate = searchByAttValue;
     fetchRequest.fetchLimit = 1;
     NSArray *result = [context executeFetchRequest:fetchRequest error:nil];
-    return [result lastObject];
+    return [result firstObject];
 }
 
 +(NSFetchRequest*)fetchRequest
@@ -226,8 +226,7 @@
 + (User *)createOrUpdateWithServiceResult:(NSDictionary *)data inContext:(NSManagedObjectContext *)context;
 {
     User *user = [User findFirstByAttribute:@"userId" withValue:data[@"id"] inContext:context];
-    if (!user)
-    {
+    if (!user){
         user = [User insert:context];
     }
     user.userId = data[@"id"];

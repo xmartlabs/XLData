@@ -195,10 +195,10 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case NSFetchedResultsChangeInsert:
-                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self insertSectionAnimationForIndex:sectionIndex]];
                 break;
             case NSFetchedResultsChangeDelete:
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                 [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self deleteSectionAnimationForIndex:sectionIndex]];
                 break;
             default:
                 NSParameterAssert(YES);
@@ -226,17 +226,16 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case NSFetchedResultsChangeInsert:
-                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:[self insertRowAnimationForIndexPath:newIndexPath]];
                 break;
             case NSFetchedResultsChangeDelete:
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:[self deleteRowAnimationForIndexPath:indexPath]];
                 break;
             case NSFetchedResultsChangeMove:
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
                 break;
             case NSFetchedResultsChangeUpdate:
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self reloadRowAnimationForIndexPath:newIndexPath]];
                 break;
         }
     }
@@ -527,8 +526,31 @@
         [self.fetchedResultsController performFetch:nil];
         [self reloadDataSet];
     }
-    
-    
+}
+
+-(UITableViewRowAnimation)insertRowAnimationForIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewRowAnimationAutomatic;
+}
+
+-(UITableViewRowAnimation)deleteRowAnimationForIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewRowAnimationAutomatic;
+}
+
+-(UITableViewRowAnimation)reloadRowAnimationForIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewRowAnimationAutomatic;
+}
+
+-(UITableViewRowAnimation)insertSectionAnimationForIndex:(NSUInteger)sectionIndex
+{
+    return UITableViewRowAnimationAutomatic;
+}
+
+-(UITableViewRowAnimation)deleteSectionAnimationForIndex:(NSUInteger)sectionIndex
+{
+    return UITableViewRowAnimationAutomatic;
 }
 
 #pragma mark - UISearchResultsUpdating
