@@ -232,7 +232,15 @@
                 [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:[self deleteRowAnimationForIndexPath:indexPath]];
                 break;
             case NSFetchedResultsChangeMove:
-                [self.tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+                // Fix for issue on NSFetchedResultsController: https://forums.developer.apple.com/thread/4999
+                // For an updated object, the didChangeObject: delegate method is called twice: Once with the NSFetchedResultsChangeUpdate event and then again with the NSFetchedResultsChangeMove event (and indexPath == newIndexPath). If indexPath with newIndexPath are equal, then the error occures.
+                // Beta fix, once Apple comes up with a fix this should be removed
+                if (![indexPath isEqual:newIndexPath]) {
+                    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                                          withRowAnimation:[self deleteRowAnimationForIndexPath:indexPath]];
+                    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                                          withRowAnimation:[self insertRowAnimationForIndexPath:newIndexPath]];
+                }
                 break;
             case NSFetchedResultsChangeUpdate:
                 [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self reloadRowAnimationForIndexPath:newIndexPath]];
