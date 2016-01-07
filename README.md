@@ -326,6 +326,10 @@ Requirements
 Release Notes
 --------------
 
+Version 2.0.2
+
+* Bug fixes and stability improvements.
+
 Version 2.0.0
 
 * Bug fixes.
