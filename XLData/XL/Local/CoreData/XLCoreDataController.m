@@ -33,9 +33,12 @@
 
 @implementation XLCoreDataController
 {
+    BOOL _isIOS8;
     BOOL _beginUpdates;
     NSMutableArray * _collectionViewObjectChanges;
     NSMutableArray * _collectionViewSectionChanges;
+    NSMutableSet * _deletedSections;
+    NSMutableSet * _insertedSections;
     BOOL _isEmptyState;
 }
 
@@ -81,6 +84,8 @@
 
 -(void)initializeXLCoreDataController
 {
+    _isIOS8 = ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending &&
+               [[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] == NSOrderedAscending);
     _beginUpdates                                        = NO;
     self.fetchedResultsController                        = nil;
     _isEmptyState = NO;
@@ -116,6 +121,8 @@
     [super viewDidLoad];
     _collectionViewObjectChanges = [NSMutableArray new];
     _collectionViewSectionChanges = [NSMutableArray new];
+    _deletedSections = [[NSMutableSet alloc] init];
+    _insertedSections = [[NSMutableSet alloc] init];
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         if (!self.tableView){
             self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds
@@ -173,6 +180,8 @@
 
 -(void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
+    _insertedSections = [[NSMutableSet alloc] init];
+    _deletedSections = [[NSMutableSet alloc] init];
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView && !_beginUpdates){
         _beginUpdates = YES;
         [self.tableView beginUpdates];
@@ -195,10 +204,12 @@
     if (self.dataStoreControllerType == XLDataStoreControllerTypeTableView){
         switch (type) {
             case NSFetchedResultsChangeInsert:
+                [_insertedSections addObject:@(sectionIndex)];
                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self insertSectionAnimationForIndex:sectionIndex]];
                 break;
             case NSFetchedResultsChangeDelete:
-                 [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self deleteSectionAnimationForIndex:sectionIndex]];
+                [_deletedSections addObject:@(sectionIndex)];
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:[self deleteSectionAnimationForIndex:sectionIndex]];
                 break;
             default:
                 NSParameterAssert(YES);
@@ -243,7 +254,10 @@
                 }
                 break;
             case NSFetchedResultsChangeUpdate:
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self reloadRowAnimationForIndexPath:newIndexPath]];
+                if (_isIOS8 || [_deletedSections containsObject:@(indexPath.section)] || [_insertedSections containsObject:@(indexPath.section)]) {
+                    return;
+                }
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self reloadRowAnimationForIndexPath:indexPath]];
                 break;
         }
     }
