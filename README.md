@@ -40,7 +40,7 @@ Usage
 `XLData` supports different scenarios from in-memory to core data data sets, it is also able to synchronize the data set with the json results of an API endpoint. In this section we'll briefly explain how it can be used in typical scenarios. For a more detailed explanation please take a look at the [Examples](Examples) folder.
 
 
-####Data Store table/collection view controller
+#### Data Store table/collection view controller
 
 1 - Create a view controller object that extends from `XLDataStoreController`.
 
@@ -69,7 +69,7 @@ Any changes made to the data store will be automatically reflected in the table/
 For further details on how to implement this kind of view controller take a look at [UsersDataStoreController.m](/Examples/Controller/DataStore/UsersDataStoreController.m) file. You can see it in action by running the Demo app and tapping the cell "Data Store TableView" or "Data Store CollectionView".
 
 
-####Data Store table/collection view controller sync with remote json endpoint
+#### Data Store table/collection view controller sync with remote json endpoint
 
 1 - Create a view controller object that extends from `XLRemoteDataStoreController`.
 
