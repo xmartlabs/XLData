@@ -34,7 +34,7 @@
  */
 @interface XLDataStore : NSObject
 
-@property id<XLDataStoreDelegate> delegate;
+@property (weak, nonatomic) id<XLDataStoreDelegate> delegate;
 
 - (instancetype)init;
 - (instancetype)initWithDelegate:(id<XLDataStoreDelegate>)delegate;
