@@ -126,6 +126,7 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
     NSMutableURLRequest * request = self.prepareURLRequest;
     XLDataLoader * __weak weakSelf = self;
     return [[self sessionManagerForDataLoader:self] dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
             if (responseObject){
                 NSMutableDictionary * newUserInfo = [error.userInfo mutableCopy];
@@ -139,13 +140,14 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
         } else {
             NSDictionary * data = [responseObject isKindOfClass:[NSDictionary class]] ? responseObject : @{ weakSelf.collectionKeyPath : responseObject };
             if ([weakSelf.storeDelegate respondsToSelector:@selector(dataLoader:convertJsonDataToModelObject:)]){
-                data = [self.storeDelegate dataLoader:weakSelf convertJsonDataToModelObject:data];
+                data = [weakSelf.storeDelegate dataLoader:weakSelf convertJsonDataToModelObject:data];
             }
-            self.loadedData = data;
+            weakSelf.loadedData = data;
+            if (strongSelf){
+                strongSelf->_hasMoreToLoad = (weakSelf.limit != 0 && (weakSelf.loadedDataItems.count >= weakSelf.limit));
+            }
             void (^completionHandler)() = ^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _isLoadingData = NO;
-                    _hasMoreToLoad = (weakSelf.limit != 0 && (weakSelf.loadedDataItems.count >= weakSelf.limit));
                     [weakSelf dataLoaderDidLoadData:weakSelf];
                 });
             };
@@ -155,6 +157,10 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
             else{
                 completionHandler();
             }
+        }
+        if (strongSelf){
+            strongSelf->_isLoadingData = NO;
+            strongSelf->_task = nil;
         }
     }];
 }
@@ -170,6 +176,7 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
 {
     [_task cancel];
     _task = nil;
+    _isLoadingData = nil;
 }
 
 -(void)load
@@ -231,8 +238,6 @@ NSString * const kXLRemoteDataLoaderDefaultKeyForNonDictionaryResponse = @"data"
 
 -(void)dataLoaderDidFailLoadData:(XLDataLoader *)dataLoader withError:(NSError *)error
 {
-    // change flags
-    _isLoadingData = NO;
     if (self.delegate != self && [self.delegate respondsToSelector:@selector(dataLoaderDidFailLoadData:withError:)]){
         [self.delegate dataLoaderDidFailLoadData:self withError:error];
     }
